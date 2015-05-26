@@ -1,6 +1,17 @@
 <?php
 /**
+ * Writes log recort into file
  *
+ * 	"writers" => [
+		"file" => [
+			"level" => Level::DEBUG,
+			"class" => "Solo\\Logger\\Writers\\FileWriter",
+			"writeOnlyCurrentLevel" => true,
+			"ignoreErrors" => false,
+			"options" => [
+			"output" => "debug-log.txt"
+			]
+		],
  *
  * PHP version 5
  *

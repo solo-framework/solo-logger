@@ -1,6 +1,7 @@
 .buildpath
 .project
 .settings
+composer.lock
 .idea
 vendor
 !.gitkeep
