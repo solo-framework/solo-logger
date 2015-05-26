@@ -22,6 +22,13 @@ class Logger
 	public $name = null;
 
 	/**
+	 * Enabled\disabled
+	 *
+	 * @var bool
+	 */
+	public $enabled = true;
+
+	/**
 	 * Pattern of log message
 	 *
 	 * @var string
@@ -56,8 +63,9 @@ class Logger
 		// List of loggers
 		"loggers" => [
 			"default" => [
+				"enabled" => true,
 				"writers" => ["default"],
-				"format" => "{date-time} {level},{logger-name}: {message}\n"
+//				"format" => "{date-time} {log-level},{logger-name}: {message}\n"
 			]
 		],
 
@@ -65,6 +73,7 @@ class Logger
 		"writers" => [
 
 			"default" => [
+				"enabled" => true,
 				"level" => Level::DEBUG,
 				"class" => "Solo\\Logger\\Writers\\ConsoleWriter",
 				"ignoreErrors" => true,
@@ -130,7 +139,8 @@ class Logger
 				throw new \RuntimeException("Logger '{$name}' is not defined");
 
 			$logger = new Logger($name);
-			$logger->format = $opts["format"];
+			$logger->format = self::getOption($opts, "format", "{date-time} [{log-level}] {logger-name}: {message}\n");//$opts["format"];
+			$logger->enabled = self::getOption($opts, "enabled", true);
 
 			foreach ($opts["writers"] as $wr)
 				$logger->addWriter($wr);
@@ -149,9 +159,10 @@ class Logger
 		$className = $opts["class"];
 		$rc = new \ReflectionClass($className);
 		$writer = $rc->newInstance();
-		$writer->level = $opts["level"];
-		$writer->ignoreErrors = $this->getOption($opts, "ignoreErrors", true);
-		$writer->writeOnlyCurrentLevel = $this->getOption($opts, "writeOnlyCurrentLevel", false);
+		$writer->level =                 self::getOption($opts, "level", Level::DEBUG);//$opts["level"];
+		$writer->ignoreErrors =          self::getOption($opts, "ignoreErrors", true);
+		$writer->enabled =               self::getOption($opts, "enabled", true);
+		$writer->writeOnlyCurrentLevel = self::getOption($opts, "writeOnlyCurrentLevel", false);
 
 		foreach ($opts["options"] as $k => $v)
 			$writer->$k = $v;
@@ -159,7 +170,7 @@ class Logger
 		$this->writers[$name] = $writer;
 	}
 
-	protected function getOption($list, $key, $default)
+	protected static function getOption($list, $key, $default)
 	{
 		if (array_key_exists($key, $list))
 			return $list[$key];
@@ -177,16 +188,18 @@ class Logger
 	 */
 	public function write($level, $message)
 	{
-		$res = $this->format;
-
-		foreach (self::$settings["parsers"] as $name => $className)
+		if ($this->enabled)
 		{
-			$inst = new $className($res);
-			$res = $inst->parse($this->name, $level, $message);
-		}
+			$res = $this->format;
+			foreach (self::$settings["parsers"] as $name => $className)
+			{
+				$inst = new $className($res);
+				$res = $inst->parse($this->name, $level, $message);
+			}
 
-		foreach ($this->writers as $writer)
-			$writer->handle($level, $res);
+			foreach ($this->writers as $writer)
+				$writer->handle($level, $res);
+		}
 	}
 
 	public function debug($message)

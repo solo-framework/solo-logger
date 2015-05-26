@@ -15,6 +15,13 @@ use Solo\Logger\Level;
 abstract class BaseWriter
 {
 	/**
+	 * Enabled\disabled
+	 *
+	 * @var bool
+	 */
+	public $enabled = true;
+
+	/**
 	 * Can write messages which have this level and bigger
 	 *
 	 * @var int
@@ -39,6 +46,9 @@ abstract class BaseWriter
 
 	public function handle($level, $message)
 	{
+		if (!$this->enabled)
+			return;
+
 		$canWrite = false;
 		if ($this->writeOnlyCurrentLevel && ($this->level == $level))
 			$canWrite = true;
