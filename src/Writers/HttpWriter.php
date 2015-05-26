@@ -1,6 +1,15 @@
 <?php
 /**
+ * Sends messages to HTTP server
  *
+ * 	"writers" => [
+		"http" => [
+			"level" => Level::DEBUG,
+			"class" => "Solo\\Logger\\Writers\\HttpWriter",
+			"writeOnlyCurrentLevel" => false,
+			"ignoreErrors" => true,
+			"options" => [ "url" => "http://my-log-server.com/log" ]
+		],
  *
  * PHP version 5
  *
@@ -22,7 +31,13 @@ class HttpWriter extends BaseWriter
 			"content" => $data
 		)));
 
-		file_get_contents($this->url, false, null);
+		$res = @file_get_contents($this->url, false, $ctx);
+		if (!$res)
+		{
+			$last = error_get_last();
+			$error = @$last["message"];
+			throw new \RuntimeException("HttpWriter error: {$error}");
+		}
 	}
 }
 

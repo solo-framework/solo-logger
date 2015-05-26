@@ -16,12 +16,19 @@ require_once "vendor/autoload.php";
 $settings = [
 	"loggers" => [
 		"default" => [
-			"writers" => ["default", "file_debug", "file_error"],
+			"writers" => ["default", "http"],
 			"format" => "{date-time} [{log-level}] {logger-name} [IP: {ip-address}]:\nMessage:\n{message}\n"
 		]
 	],
 
 	"writers" => [
+		"http" => [
+			"level" => Level::DEBUG,
+			"class" => "Solo\\Logger\\Writers\\HttpWriter",
+			"writeOnlyCurrentLevel" => false,
+			"ignoreErrors" => false,
+			"options" => [ "url" => "http://local-box.ru" ]
+		],
 
 		"file_debug" => [
 			"level" => Level::DEBUG,
@@ -44,7 +51,7 @@ $settings = [
 	],
 
 	"parsers" => [
-
+//		"memory" => "Solo\\Logger\\Parsers\\MemoryUsageParser"
 	]
 ];
 
