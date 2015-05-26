@@ -12,22 +12,17 @@ namespace Solo\Logger\Parsers;
 
 class StringParser extends BaseParser
 {
-
 	/**
 	 * Замена макросов в шаблоне лога на значения
 	 *
-	 * @param string $loggerName
-	 * @param int $level
-	 * @param mixed $data Данные для записи в лог
-	 *
-	 * @return mixed
+	 * @return LogRecord
 	 */
-	public function parse($loggerName, $level, $data)
+	public function parse()
 	{
-		if (is_string($data))
-			return str_replace("{message}", $data, $this->pattern);
-		else
-			return $this->pattern;
+		if (is_string($this->record->context))
+			$this->record->formatted = str_replace("{context}", $this->record->context, $this->record->formatted);
+
+		return $this->record;
 	}
 }
 

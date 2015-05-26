@@ -10,11 +10,13 @@
 
 namespace Solo\Logger\Writers;
 
+use Solo\Logger\LogRecord;
+
 class ConsoleWriter extends BaseWriter
 {
-	function write($level, $data)
+	function write($level, LogRecord $data)
 	{
-		print $data;
+		print $data->formatted;
 	}
 }
 

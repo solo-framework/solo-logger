@@ -11,6 +11,7 @@
 namespace Solo\Logger\Writers;
 
 use Solo\Logger\Level;
+use Solo\Logger\LogRecord;
 
 abstract class BaseWriter
 {
@@ -42,9 +43,9 @@ abstract class BaseWriter
 	 */
 	public $writeOnlyCurrentLevel = false;
 
-	abstract function write($level, $data);
+	abstract function write($level, LogRecord $data);
 
-	public function handle($level, $message)
+	public function handle($level, LogRecord $message)
 	{
 		if (!$this->enabled)
 			return;

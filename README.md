@@ -18,7 +18,7 @@ $arr = array("key" => "val", "key1" => 928);
 $obj = new stdClass();
 $obj->attribute = "value";
 
-$l->error($e);
-$l->debug($arr);
-$l->debug($obj);
+$l->error("Error!", $e);
+$l->debug("Dump an array", $arr);
+$l->debug("Write some object", $obj);
 ````

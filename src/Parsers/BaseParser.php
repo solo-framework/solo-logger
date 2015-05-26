@@ -10,24 +10,22 @@
 
 namespace Solo\Logger\Parsers;
 
+use Solo\Logger\LogRecord;
+
 abstract class BaseParser
 {
-	public $pattern = "{date-time} [{level}] {logger-name}: {message}\n";
+	public $record = null;
 
-	public function __construct($pattern)
+	public function __construct(LogRecord $record)
 	{
-		$this->pattern = $pattern;
+		$this->record = $record;
 	}
 
 	/**
 	 * Замена макросов в шаблоне лога на значения
 	 *
-	 * @param string $loggerName
-	 * @param int $level
-	 * @param mixed $data Данные для записи в лог
-	 *
-	 * @return mixed
+	 * @return LogRecord
 	 */
-	public abstract function parse($loggerName, $level, $data);
+	public abstract function parse();
 }
 

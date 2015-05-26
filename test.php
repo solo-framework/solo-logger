@@ -16,8 +16,8 @@ require_once "vendor/autoload.php";
 $settings = [
 	"loggers" => [
 		"default" => [
-			"writers" => ["default", "http"],
-			"format" => "{date-time} [{log-level}] {logger-name} [IP: {ip-address}]:\nMessage:\n{message}\n"
+			"writers" => ["default"],
+			"format" => "{date-time} [{log-level}] {logger-name} [IP: {ip-address}]:\nMessage: {message}\nContext: {context}\n"
 		]
 	],
 
@@ -67,7 +67,7 @@ $obj->mmmmm = "dsdsdsd";
 
 //$l->error($arr);
 //$l->debug($obj);
-$l->error("dsdsd");
+$l->debug("Это сообщение", "blabla");
 //print_r($l);
 
 

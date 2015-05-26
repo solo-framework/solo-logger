@@ -182,19 +182,27 @@ class Logger
 	 * Write a message
 	 *
 	 * @param int $level Log level
-	 * @param mixed $message Message
+	 * @param string $message Message
+	 * @param mixed $context
 	 *
 	 * @throws \Exception
 	 */
-	public function write($level, $message)
+	public function write($level, $message, $context = null)
 	{
 		if ($this->enabled)
 		{
-			$res = $this->format;
+			$record = new LogRecord();
+			$record->context = $context;
+			$record->message = $message;
+			$record->loggerName = $this->name;
+			$record->level = $level;
+			$record->formatted = $this->format;
+
+			$res = $record;
 			foreach (self::$settings["parsers"] as $name => $className)
 			{
 				$inst = new $className($res);
-				$res = $inst->parse($this->name, $level, $message);
+				$res = $inst->parse();
 			}
 
 			foreach ($this->writers as $writer)
@@ -202,44 +210,44 @@ class Logger
 		}
 	}
 
-	public function debug($message)
+	public function debug($message, $context = null)
 	{
-		$this->write(Level::DEBUG, $message);
+		$this->write(Level::DEBUG, $message, $context);
 	}
 
-	public function error($message)
+	public function error($message, $context = null)
 	{
-		$this->write(Level::ERROR, $message);
+		$this->write(Level::ERROR, $message, $context);
 	}
 
-	public function info($message)
+	public function info($message, $context = null)
 	{
-		$this->write(Level::INFO, $message);
+		$this->write(Level::INFO, $message, $context);
 	}
 
-	public function notice($message)
+	public function notice($message, $context = null)
 	{
-		$this->write(Level::NOTICE, $message);
+		$this->write(Level::NOTICE, $message, $context);
 	}
 
-	public function warning($message)
+	public function warning($message, $context = null)
 	{
-		$this->write(Level::WARNING, $message);
+		$this->write(Level::WARNING, $message, $context);
 	}
 
-	public function critical($message)
+	public function critical($message, $context = null)
 	{
-		$this->write(Level::CRITICAL, $message);
+		$this->write(Level::CRITICAL, $message, $context);
 	}
 
-	public function alert($message)
+	public function alert($message, $context = null)
 	{
-		$this->write(Level::ALERT, $message);
+		$this->write(Level::ALERT, $message, $context);
 	}
 
-	public function emergency($message)
+	public function emergency($message, $context = null)
 	{
-		$this->write(Level::EMERGENCY, $message);
+		$this->write(Level::EMERGENCY, $message, $context);
 	}
 }
 

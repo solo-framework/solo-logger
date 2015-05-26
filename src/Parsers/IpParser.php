@@ -16,16 +16,13 @@ class IpParser extends BaseParser
 	/**
 	 * Замена макросов в шаблоне лога на значения
 	 *
-	 * @param string $loggerName
-	 * @param int $level
-	 * @param mixed $data Данные для записи в лог
-	 *
-	 * @return mixed
+	 * @return LogRecord
 	 */
-	public function parse($loggerName, $level, $data)
+	public function parse()
 	{
 		$ip = !empty($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : 'unavailable';
-		return str_replace("{ip-address}", $ip, $this->pattern);
+		$this->record->formatted = str_replace("{ip-address}", $ip, $this->record->formatted);
+		return $this->record;
 	}
 }
 

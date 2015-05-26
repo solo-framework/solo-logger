@@ -12,26 +12,19 @@ namespace Solo\Logger\Parsers;
 
 class ResourceParser extends BaseParser
 {
-
 	/**
 	 * Замена макросов в шаблоне лога на значения
 	 *
-	 * @param string $loggerName
-	 * @param int $level
-	 * @param mixed $data Данные для записи в лог
-	 *
-	 * @return mixed
+	 * @return LogRecord
 	 */
-	public function parse($loggerName, $level, $data)
+	public function parse()
 	{
-		if (is_resource($data))
+		if (is_resource($this->record->context))
 		{
-			return str_replace("{message}", "Resource type: " . get_resource_type($data), $this->pattern);
+			$this->record->formatted = str_replace("{context}", "Resource type: " . get_resource_type($this->record->context), $this->record->formatted);
 		}
-		else
-		{
-			return $this->pattern;
-		}
+
+		return $this->record;
 	}
 }
 

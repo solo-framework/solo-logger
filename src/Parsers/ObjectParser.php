@@ -12,26 +12,18 @@ namespace Solo\Logger\Parsers;
 
 class ObjectParser extends BaseParser
 {
-
 	/**
 	 * Замена макросов в шаблоне лога на значения
 	 *
-	 * @param string $loggerName
-	 * @param int $level
-	 * @param mixed $data Данные для записи в лог
-	 *
-	 * @return mixed
+	 * @return LogRecord
 	 */
-	public function parse($loggerName, $level, $data)
+	public function parse()
 	{
-		if (is_object($data))
+		if (is_object($this->record->context))
 		{
-			return str_replace("{message}", print_r($data, 1), $this->pattern);
+			$this->record->formatted = str_replace("{context}", print_r($this->record->context, 1), $this->record->formatted);
 		}
-		else
-		{
-			return $this->pattern;
-		}
+		return $this->record;
 	}
 }
 
