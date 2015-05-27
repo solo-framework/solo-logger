@@ -5,7 +5,7 @@
  * PHP version 5
  *
  * @package
- * @author  Andrey Filippov <afi@i-loto.ru>
+ * @author  Andrey Filippov <afi.work@gmail.com>
  */
 
 namespace Solo\Logger\Parsers;
@@ -21,7 +21,7 @@ class ObjectParser extends BaseParser
 	{
 		if (is_object($this->record->context))
 		{
-			$this->record->formatted = str_replace("{context}", print_r($this->record->context, 1), $this->record->formatted);
+			$this->record->formatted = str_replace("{log-context}", print_r($this->record->context, 1), $this->record->formatted);
 		}
 		return $this->record;
 	}

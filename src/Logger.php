@@ -5,7 +5,7 @@
  * PHP version 5
  *
  * @package
- * @author  Andrey Filippov <afi@i-loto.ru>
+ * @author  Andrey Filippov <afi.work@gmail.com>
  */
 
 namespace Solo\Logger;
@@ -33,7 +33,7 @@ class Logger
 	 *
 	 * @var string
 	 */
-	public $format = "{date-time} {level},{logger-name}: {message}\n";
+	public $format = "{date-time} [{log-level}],{log-name}: {log-message}\nContext: {log-context}\n\n";
 
 	/**
 	 * Levels
@@ -84,7 +84,6 @@ class Logger
 
 		// List of classes to parse and fill log patterns
 		"parsers" => [
-			"builtin" => "Solo\\Logger\\Parsers\\BuiltInParser",
 			"exception" => "Solo\\Logger\\Parsers\\ExceptionParser",
 			"resource" => "Solo\\Logger\\Parsers\\ResourceParser",
 			"array" => "Solo\\Logger\\Parsers\\ArrayParser",
@@ -92,6 +91,7 @@ class Logger
 			"object" => "Solo\\Logger\\Parsers\\ObjectParser",
 			"ip" => "Solo\\Logger\\Parsers\\IpParser",
 			"env" => "Solo\\Logger\\Parsers\\EnvParser",
+			"builtin" => "Solo\\Logger\\Parsers\\BuiltInParser",
 		]
 	);
 
@@ -139,7 +139,8 @@ class Logger
 				throw new \RuntimeException("Logger '{$name}' is not defined");
 
 			$logger = new Logger($name);
-			$logger->format = self::getOption($opts, "format", "{date-time} [{log-level}] {logger-name}: {message}\n");//$opts["format"];
+//			$logger->format = self::getOption($opts, "format", "{date-time} [{log-level}] {logger-name}: {message}\n");//$opts["format"];
+			$logger->format = self::getOption($opts, "format", $logger->format);//$opts["format"];
 			$logger->enabled = self::getOption($opts, "enabled", true);
 
 			foreach ($opts["writers"] as $wr)

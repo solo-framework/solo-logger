@@ -5,7 +5,7 @@
  * PHP version 5
  *
  * @package
- * @author  Andrey Filippov <afi@i-loto.ru>
+ * @author  Andrey Filippov <afi.work@gmail.com>
  */
 
 namespace Solo\Logger\Parsers;
@@ -20,7 +20,7 @@ class StringParser extends BaseParser
 	public function parse()
 	{
 		if (is_string($this->record->context))
-			$this->record->formatted = str_replace("{context}", $this->record->context, $this->record->formatted);
+			$this->record->formatted = str_replace("{log-context}", $this->record->context, $this->record->formatted);
 
 		return $this->record;
 	}

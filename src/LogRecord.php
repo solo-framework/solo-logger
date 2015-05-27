@@ -20,6 +20,6 @@ class LogRecord
 
 	public function __construct()
 	{
-		$this->datetime = date("c");//\DateTime::createFromFormat('U.u', sprintf('%.6F', microtime(true)));
+		$this->datetime = time();//date("c");//\DateTime::createFromFormat('U.u', sprintf('%.6F', microtime(true)));
 	}
 }

@@ -5,18 +5,43 @@
  * PHP version 5
  *
  * @package
- * @author  Andrey Filippov <afi@i-loto.ru>
+ * @author  Andrey Filippov <afi.work@gmail.com>
  */
 
 use Solo\Logger\Level;
 use Solo\Logger\Logger;
+
+
+//
+//$fi = new SplFileInfo(realpath("log.txt"));
+//
+//$files = glob("{$fi->getRealPath()}.*");
+//print_r($files);
+//
+//usort($files, function ($a, $b) {
+//	return strcmp($b, $a);
+//});
+//
+//var_dump($fi->getRealPath());
+//var_dump($fi->getBasename());
+//var_dump($fi->getFilename());
+//var_dump($fi->getPathname());
+//var_dump($fi->getPath());
+////exit();
+//$firstFile = realpath($files[0]);
+//
+//preg_match("%{$fi->getRealPath()}\.?([0-9]*)$%", $firstFile, $matches);
+//
+////print_r($firstFile);
+//var_dump($matches);
+//exit();
 
 require_once "vendor/autoload.php";
 
 $settings = [
 	"loggers" => [
 		"default" => [
-			"writers" => ["default"],
+			"writers" => ["file_debug"],
 			"format" => "{date-time} [{log-level}] {logger-name} [IP: {ip-address}]:\nMessage: {message}\nContext: {context}\n"
 		]
 	],
@@ -27,7 +52,7 @@ $settings = [
 			"class" => "Solo\\Logger\\Writers\\HttpWriter",
 			"writeOnlyCurrentLevel" => false,
 			"ignoreErrors" => false,
-			"options" => [ "url" => "http://local-box.ru" ]
+			"options" => [ "url" => "http://localhost:8080" ]
 		],
 
 		"file_debug" => [
@@ -36,7 +61,9 @@ $settings = [
 			"writeOnlyCurrentLevel" => true,
 			"ignoreErrors" => false,
 			"options" => [
-				"output" => "debug-log.txt"
+				"output" => "debug-log.txt",
+//				"split" => true,
+//				"splitSize" => 11
 			]
 		],
 		"file_error" => [
@@ -57,9 +84,7 @@ $settings = [
 
 Logger::init($settings);
 $l = Logger::get();
-
 $e = new RuntimeException("sfsdfsdfs");
-
 $arr = array("2e2e" => "dssdsd", "000" => 928);
 
 $obj = new stdClass();
@@ -67,8 +92,7 @@ $obj->mmmmm = "dsdsdsd";
 
 //$l->error($arr);
 //$l->debug($obj);
-$l->debug("Это сообщение", "blabla");
-//print_r($l);
+$l->debug("Это сообщение", $e);
 
 
 

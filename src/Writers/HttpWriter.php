@@ -14,21 +14,23 @@
  * PHP version 5
  *
  * @package
- * @author  Andrey Filippov <afi@i-loto.ru>
+ * @author  Andrey Filippov <afi.work@gmail.com>
  */
 
 namespace Solo\Logger\Writers;
+
+use Solo\Logger\LogRecord;
 
 class HttpWriter extends BaseWriter
 {
 	public $url = "http://localhost/";
 
-	function write($level, $data)
+	function write($level, LogRecord $data)
 	{
 		$ctx = stream_context_create(array("http" => array(
-			"method" => "GET",
-			"header" => "Content-type: application/x-www-form-urlencoded\r\n" . "Content-Length: " . strlen($data) . "\r\n",
-			"content" => $data
+			"method" => "POST",
+			"header" => "Content-type: application/x-www-form-urlencoded\r\n" . "Content-Length: " . strlen($data->formatted) . "\r\n",
+			"content" => $data->formatted
 		)));
 
 		$res = @file_get_contents($this->url, false, $ctx);
