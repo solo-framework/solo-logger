@@ -22,20 +22,28 @@ class EnvParser extends BaseParser
 		$matches = array();
 
 		// строка вида {env._SERVER.LC_NAME}
-		if (preg_match('/\{env\.([\w\.]+)\}/im', $this->record->formatted, $matches) > 0)
+		if (preg_match_all('/\{env\.([\w\.]+)\}/im', $this->record->formatted, $macrosList) > 0)
 		{
-			$parts = explode(".", $matches[1]);
-			$array = @$GLOBALS[$parts[0]];
+			foreach ($macrosList[1] as $match)
+			{
+				$parts = explode(".", $match);
+				$array = @$GLOBALS[$parts[0]];
+				array_shift($parts);
+				$val = $array;
 
-			array_shift($parts);
-			$val = $array;
-			foreach ($parts as $key)
-				$val = $val[$key];
+				foreach ($parts as $i => $key)
+				{
+					if (is_array($val))
+						$val = @$val[$key];
+					else if (is_object($val))
+						$val = $val->{$key};
+				}
 
-			if (is_array($val))
-				$val = print_r($val, 1);
+				if (is_array($val) || is_object($val))
+					$val = print_r($val, 1);
 
-			$this->record->formatted = str_replace($matches[0], $val, $this->record->formatted);
+				$this->record->formatted = str_replace("{env." . $match . "}", $val, $this->record->formatted);
+			}
 		}
 
 		return $this->record;
