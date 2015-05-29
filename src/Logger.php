@@ -190,6 +190,9 @@ class Logger
 	 */
 	public function write($level, $message, $context = null)
 	{
+		if (!is_string($message))
+			throw new \InvalidArgumentException("Message must be a string");
+
 		if ($this->enabled)
 		{
 			$record = new LogRecord();
