@@ -53,18 +53,17 @@ class FileWriter extends BaseWriter
 
 	function write($level, LogRecord $data)
 	{
-//		print_r($this->level);
-		$this->output = str_replace("{log-level}", Logger::$levels[$data->level], $this->output);
+		$output = str_replace("{log-level}", Logger::$levels[$data->level], $this->output);
 
 		if ($this->split)
 		{
-			if (is_file($this->output))
+			if (is_file($output))
 			{
-				$size = filesize($this->output) / 1024;
+				$size = filesize($output) / 1024;
 				$dataSize = mb_strlen($data->formatted) / 1024;
 				if ($size + $dataSize > $this->splitSize)
 				{
-					$fi = new \SplFileInfo(realpath($this->output));
+					$fi = new \SplFileInfo(realpath($output));
 					$realPath = $fi->getRealPath();
 					$files = glob($realPath. ".*");
 
@@ -80,12 +79,12 @@ class FileWriter extends BaseWriter
 						$index = $matches[1] + 1;
 
 					}
-					rename($this->output, $this->output . "." . $index);
+					rename($output, $output . "." . $index);
 				}
 			}
 		}
 
-		$fp = fopen($this->output, "a");
+		$fp = fopen($output, "a");
 		flock($fp, LOCK_EX);
 		fwrite($fp, $data->formatted);
 		flock($fp, LOCK_UN);
