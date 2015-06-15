@@ -84,11 +84,13 @@ class Logger
 
 		// List of classes to parse and fill log patterns
 		"parsers" => [
-			"exception" => "Solo\\Logger\\Parsers\\ExceptionParser",
-			"resource" => "Solo\\Logger\\Parsers\\ResourceParser",
+			"bool" => "Solo\\Logger\\Parsers\\BoolParser",
+			"numeric" => "Solo\\Logger\\Parsers\\NumericParser",
 			"array" => "Solo\\Logger\\Parsers\\ArrayParser",
 			"string" => "Solo\\Logger\\Parsers\\StringParser",
+			"exception" => "Solo\\Logger\\Parsers\\ExceptionParser",
 			"object" => "Solo\\Logger\\Parsers\\ObjectParser",
+			"resource" => "Solo\\Logger\\Parsers\\ResourceParser",
 			"ip" => "Solo\\Logger\\Parsers\\IpParser",
 			"env" => "Solo\\Logger\\Parsers\\EnvParser",
 			"builtin" => "Solo\\Logger\\Parsers\\BuiltInParser",

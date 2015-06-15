@@ -42,7 +42,7 @@ $settings = [
 	"loggers" => [
 		"default" => [
 			"writers" => ["file_debug"],
-			"format" => "{date-time} [{log-level}] {logger-name} [IP: {ip-address}]:\nMessage: {message}\nContext: {context}\n"
+//			"format" => "{date-time} [{log-level}] {logger-name} [IP: {ip-address}]:\nMessage: {message}\nContext: {context}\n"
 		]
 	],
 
@@ -92,7 +92,7 @@ $obj->mmmmm = "dsdsdsd";
 
 //$l->error($arr);
 //$l->debug($obj);
-$l->debug("Это сообщение", $e);
+$l->debug("Это сообщение", 122.22);
 
 
 
