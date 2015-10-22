@@ -61,9 +61,9 @@ $settings = [
 			"writeOnlyCurrentLevel" => true,
 			"ignoreErrors" => false,
 			"options" => [
-				"output" => "debug-log.txt",
-//				"split" => true,
-//				"splitSize" => 11
+				"output" => "./{log-level}/debug-log.txt",
+				"split" => true,
+				"splitSize" => 100
 			]
 		],
 		"file_error" => [
@@ -92,7 +92,8 @@ $obj->mmmmm = "dsdsdsd";
 
 //$l->error($arr);
 //$l->debug($obj);
-$l->debug("Это сообщение", 122.22);
+for ($i =0; $i< 100000; $i++)
+	$l->debug("Это сообщение", 122.22);
 
 
 

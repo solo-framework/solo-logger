@@ -55,11 +55,16 @@ class FileWriter extends BaseWriter
 	{
 		$output = str_replace("{log-level}", Logger::$levels[$data->level], $this->output);
 
+		if (!is_file($output))
+			$this->createFullPath($output);
+
 		if ($this->split)
 		{
 			if (is_file($output))
 			{
+				clearstatcache(null, $output);
 				$size = filesize($output) / 1024;
+
 				$dataSize = mb_strlen($data->formatted) / 1024;
 				if ($size + $dataSize > $this->splitSize)
 				{
@@ -71,13 +76,16 @@ class FileWriter extends BaseWriter
 						return strcmp($b, $a);
 					});
 
+					$ids[] = 1;
 					$index = 1;
 					if (count($files))
 					{
-						$firstFile = realpath($files[0]);
-						preg_match("%{$fi->getRealPath()}\.?([0-9]*)$%", $firstFile, $matches);
-						$index = $matches[1] + 1;
-
+						foreach ($files as $file)
+						{
+							preg_match("%{$fi->getRealPath()}\.?([0-9]*)$%", $file, $matches);
+							$ids[] = $matches[1];
+						}
+						$index = max($ids) + 1;
 					}
 					rename($output, $output . "." . $index);
 				}
@@ -89,6 +97,24 @@ class FileWriter extends BaseWriter
 		fwrite($fp, $data->formatted);
 		flock($fp, LOCK_UN);
 		fclose($fp);
+	}
+
+	function createFullPath($path)
+	{
+		$dir = pathinfo($path , PATHINFO_DIRNAME);
+		if (is_dir($dir))
+		{
+			return true;
+		}
+		else
+		{
+			if ($this->createFullPath($dir))
+			{
+				if (mkdir($dir))
+					return true;
+			}
+		}
+		return false;
 	}
 }
 
