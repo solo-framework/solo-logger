@@ -50,6 +50,18 @@ class FileWriter extends BaseWriter
 	 */
 	public $splitSize = 512;
 
+	/**
+	 * The parameter consists of three octal number components specifying access restrictions for the owner,
+	 * the user group in which the owner is in, and to everybody else in this order.
+	 * One component can be computed by adding up the needed permissions for that target user base.
+	 * Number 1 means that you grant execute rights, number 2 means that you make the file writeable,
+	 * number 4 means that you make the file readable. Add up these numbers to specify needed rights.
+	 * You can also read more about modes on Unix systems with 'man 1 chmod' and 'man 2 chmod'.
+	 *
+	 * @var int
+	 */
+	public $mode = 0777;
+
 
 	function write($level, LogRecord $data)
 	{
@@ -93,6 +105,7 @@ class FileWriter extends BaseWriter
 		}
 
 		$fp = fopen($output, "a");
+		chmod($output, $this->mode);
 		flock($fp, LOCK_EX);
 		fwrite($fp, $data->formatted);
 		flock($fp, LOCK_UN);
@@ -110,8 +123,10 @@ class FileWriter extends BaseWriter
 		{
 			if ($this->createFullPath($dir))
 			{
-				if (mkdir($dir))
+				if (mkdir($dir) && chmod($dir, $this->mode))
+				{
 					return true;
+				}
 			}
 		}
 		return false;
