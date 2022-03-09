@@ -21,7 +21,7 @@ class IpParser extends BaseParser
 	public function parse()
 	{
 		$ip = !empty($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : 'unavailable';
-		$this->record->formatted = str_replace("{ip-address}", $ip, $this->record->formatted);
+		$this->record->formatted = str_replace("{ip-address}", (string)$ip, $this->record->formatted);
 		return $this->record;
 	}
 }

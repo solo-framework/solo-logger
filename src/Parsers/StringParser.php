@@ -20,7 +20,7 @@ class StringParser extends BaseParser
 	public function parse()
 	{
 		if (is_string($this->record->context))
-			$this->record->formatted = str_replace("{log-context}", $this->record->context, $this->record->formatted);
+			$this->record->formatted = str_replace("{log-context}", (string)$this->record->context, $this->record->formatted);
 
 		return $this->record;
 	}

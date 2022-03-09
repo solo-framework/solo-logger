@@ -35,7 +35,7 @@ class NativeMailWriter extends BaseWriter
 			$headers .= 'MIME-Version: 1.0' . "\r\n";
 
 		$this->subject = str_replace("{log-level}", Logger::$levels[$data->level], $this->subject);
-		$this->subject = str_replace("{message}", $data->message, $this->subject);
+		$this->subject = str_replace("{message}", (string)$data->message, $this->subject);
 
 		foreach ($this->to as $to)
 			mail($to, $this->subject, $data->formatted, $headers);
