@@ -43,7 +43,7 @@ class EnvParser extends BaseParser
 					$val = print_r($val, 1);
 
 				if (is_null($val))
-					$val = [];
+					$val = "";
 				$this->record->formatted = str_replace("{env." . $match . "}", $val, $this->record->formatted);
 			}
 		}
